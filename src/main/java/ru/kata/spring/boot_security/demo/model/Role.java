@@ -16,7 +16,8 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Long id;
-    private String authority;
+    @Column(name = "authority")
+    private String name;
     @ManyToMany(mappedBy = "roles")
     Set<User> users = new HashSet<>();
 
@@ -24,13 +25,17 @@ public class Role implements GrantedAuthority {
 
     }
 
+    public Role(String authority) {
+        this.name = authority;
+    }
     public Role(String authority, Set<User> users) {
-        this.authority = authority;
+        this.name = authority;
         this.users = users;
     }
 
+
     public void setName(String autority) {
-        this.authority = autority;
+        this.name = autority;
     }
 
     public void setId(Long id) {
@@ -50,7 +55,7 @@ public class Role implements GrantedAuthority {
     }
 
     public String getName() {
-        return authority;
+        return name;
     }
 
     @Override
@@ -64,7 +69,7 @@ public class Role implements GrantedAuthority {
             return false;
 
         Role role = (Role) o;
-        return Objects.equals(role.getName(), this.authority) && Objects.equals(role.getId(), this.id);
+        return Objects.equals(role.getName(), this.name) && Objects.equals(role.getId(), this.id);
     }
 
     @Override
@@ -74,7 +79,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "role name: " + authority;
+        return  name;
     }
 
     public void addUser(User user) {

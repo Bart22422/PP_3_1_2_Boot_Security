@@ -7,13 +7,21 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.kata.spring.boot_security.demo.service.MyUserDetailsService;
+import ru.kata.spring.boot_security.demo.util.MySimpleUrlAuthenticationSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -45,25 +53,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers( "/","/index").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers( "/","/index","/add/**").permitAll()
+                .antMatchers("/user").hasAnyRole("USER","ADMIN")
+                .antMatchers("/admin").hasRole("ADMIN")
                 .and()
-                .formLogin().successHandler(successUserHandler)
-                .permitAll()
+                .formLogin()
+                    .loginPage("/modern-login-page")
+                    .loginProcessingUrl("/authenticateTheUser")
+                    .successHandler(myAuthenticationSuccessHandler())
+                    .failureUrl("/login?error")
                 .and()
                 .logout()
-                .permitAll();
-                /*.and()
-                .formLogin().loginPage("/auth/login")
-                .loginProcessingUrl("process_login")
-                .defaultSuccessUrl("/",true);*/
-              //  .failureUrl("auth/login?error");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/modern-login-page");
+
     }
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailService);
+    }
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new MySimpleUrlAuthenticationSuccessHandler();
     }
     @Bean
     public PasswordEncoder getPasswordEncoder (){return NoOpPasswordEncoder.getInstance(); }

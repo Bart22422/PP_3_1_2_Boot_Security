@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html  xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Users list</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body style="text-align: center">
+<div class="container">
+    <h1>Users</h1>
+    <table style="margin: auto">
+        <tr th:each="user: ${users}">
+            <td th:text="${user.name}"/>
+            <td th:text="${user.lastName}"/>
+            <td th:text="${user.age}"></td>
+            <td>
+                <form th:action="@{/delete}" method="post">
+                    <input type="hidden" name="id" th:value="${user.id}">
+                    <button type="submit" th:text="${user.id}+' '+'Delete User'" class="btn btn-danger"></button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+    <h3>Create user</h3>
+    <form th:action="@{/form}"   method="post" style="margin: auto">
+        <div class="form-group">
+            <label>
+                Name:
+            </label>
+            <input  name="name" />
+            <p></p>
+            <label>
+                Password:
+            </label>
+            <input  name="password" />
+            <p></p>
+            <label>
+                Last Name:
+            </label>
+            <input  name="lastName" />
+            <p></p>
+            <label>
+                Date:
+            </label>
+            <input  type="date" name="date">
+
+            <div  style="margin-top: 2rem" class="form-check" >
+                <input class="form-check-input" type="radio" name="authorisation" id="exampleRadios1" value="ROLE_USER" checked>
+                <label class="form-check-label" for="exampleRadios1">
+                    Default user
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="authorisation" id="exampleRadios2" value="ROLE_ADMIN">
+                <label class="form-check-label" for="exampleRadios2">
+                    Admin
+                </label>
+            </div>
+
+            <p style="margin-top: 2rem"><input  type="submit" value="Submit" class="btn btn-primary"/> <input type="reset" value="Reset" class="btn btn-danger" /></p>
+        </div>
+    </form>
+    </div>
+    <div style="margin-top: 2rem;">
+        <h3>Update user</h3>
+        <form th:action="@{/update}"   method="post">
+            <label>ID:</label>
+            <input type="number" name="id">
+            <label>Name:</label>
+            <input  name="name" />
+            <p></p>
+            <label>Last Name:</label>
+            <input  name="lastName" />
+            <p></p>
+            <label>Date:</label>
+            <input type="date" name="date">
+            <p><input type="submit" value="Submit"  class="btn btn-primary"/> <input type="reset" value="Reset" class="btn btn-danger"/></p>
+        </form>
+    </div>
+    <div style="margin-top: 2rem;">
+        <h3>Clean table</h3>
+        <form th:action="@{/clean}"   method="post">
+            <p><input type="submit" value="Clean table" class="btn btn-primary"/>
+        </form>
+    </div>
+</body>
+</html>
