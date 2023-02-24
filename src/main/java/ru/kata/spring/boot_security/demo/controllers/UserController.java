@@ -80,6 +80,27 @@ public class UserController {
         userService.addUser(user);
         return "redirect:/";
     }
+    @PostMapping("/update")
+    public String update (@RequestParam(value = "id")Long id,@RequestParam(value = "name", required = false)String name,@RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "date",required = false, defaultValue = "0000-00-00") String date, @RequestParam(value = "authorisation",required = false)String auth) throws ParseException {
+        User user = userService.getUser(id);
+        if( name!=null){
+            user.setName(name);
+        }
+        if( lastName!=null){
+            user.setLastName(lastName);
+        }
+        if( auth!=null){
+            user.addRole(roleService.loadByRoleName(auth));
+        }
+        if( date!=null){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+            simpleDateFormat.applyPattern("yyyy-MM-dd");
+            Date date1 = simpleDateFormat.parse(date);
+            user.setAge(date1);
+        }
+        userService.updateUser(user);
+        return  "redirect:/admin";
+    }
     @PostMapping("/delete")
     public String delete (@RequestParam(value = "id") long id){
         userService.deleteUser(id);

@@ -8,36 +8,46 @@
 <body style="font-family: Arial " class="container">
 
 
-<div   id = "loginbox"   style = "margin-top: 50px;"   class = "mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
 
-  <div class="panel panel-info">
-      <h1>Sign In</h1>
-      <form action="#" th:action = "@{/authenticateTheUser} " method = "POST" class = "form-horizontal">
-        <div th:if="${param.error}!= null" >
-          <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-              Invalid username or password
-          </div>
+    <div class="container">
+
+        <div class=" row justify-content-center mt-5" >
+
+                <div class="col">
+
+                </div>
+                <div class="col-4">
+                    <h1>Please Sing in</h1>
+                    <form action="#" th:action = "@{/authenticateTheUser} " method = "POST" class = "form-horizontal">
+
+                        <div th:if="${param.error}!= null" >
+                            <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                Invalid username or password
+                            </div>
+                        </div>
+                        <div style = "margin-bottom: 25px" class="form-group">
+                            <span></span>
+                            <input type="text"   name="username" placeholder="Username" class="form-control">
+                        </div >
+                        <div style = "margin-bottom: 25px" class="form-group">
+                            <span ></span >
+                            <input type="password" name="password" placeholder="Password" class="form-control">
+                        </div >
+                        <div style="margin-top: 10px">
+                            <div>
+                                <button type="submit" class = "btn btn-primary form-control" >Login</button >
+                            </div >
+                            <div style="margin-top: 1rem">
+                                <a href="/add" class = "alert alert-primary form-control ">Registration</a >
+                            </div >
+                        </div>
+                    </form>
+                </div>
+                <div class="col">
+
+                </div>
+
         </div>
-  <div style = "margin-bottom: 25px">
-              <span></span>
-              <input type="text"   name="username" placeholder="username">
-          </div >
-          <div style = "margin-bottom: 25px">
-              <span ></span >
-              <input type="password" name="password" placeholder="password">
-          </div >
-          <div style="margin-top: 10px">
-              <div>
-                  <button type="submit" class = "btn btn-success">Login</button >
-              </div >
-              <div style="margin-top: 1rem">
-                <a href="/add" class = "alert alert-primary ">Registration</a >
-              </div >
-          </div>
-      </form>
-  </div>
-
-</div>
-
+    </div>
 </body>
 </html>
