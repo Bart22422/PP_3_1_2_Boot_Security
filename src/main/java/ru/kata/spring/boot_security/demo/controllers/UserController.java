@@ -78,7 +78,7 @@ public class UserController {
         user.addRole(roleService.loadByRoleName(auth));
         System.out.println(user.getRoles());
         userService.addUser(user);
-        return "redirect:/";
+        return "redirect:/user";
     }
     @PostMapping("/update")
     public String update (@RequestParam(value = "id")Long id,@RequestParam(value = "name", required = false)String name,@RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "date",required = false, defaultValue = "0000-00-00") String date, @RequestParam(value = "authorisation",required = false)String auth) throws ParseException {
