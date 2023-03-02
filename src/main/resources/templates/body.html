@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="adminPage(us, users)" class="row pt-5">
+    <div class="col-2" th:each="role:${us.roles}">
+        <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#admin_page" role="tab">Admin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#user_page" role="tab">User</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-8 bg-light w-100 h-100">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="admin_page" role="tabpanel">
+
+                <h2>Admin panel</h2>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a id="list_link" class="nav-link active" data-bs-toggle="tab" href="#all_users">All users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="add_link" class="nav-link " data-bs-toggle="tab" href="#add_user">Add user</a>
+                    </li>
+                </ul>
+                <div id="content">
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="all_users" role="tabpanel">
+                            <div class="card">
+                                <div id="tab_name" class="font-weight-bold card-header">
+                                    All users
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-stripped">
+                                        <tr>
+                                            <td class=" p-2 font-weight-bold">ID</td>
+                                            <td class=" p-2 font-weight-bold">First name</td>
+                                            <td class=" p-2 font-weight-bold">Last name</td>
+                                            <td class=" p-2 font-weight-bold">Age</td>
+                                            <td class=" p-2 font-weight-bold">Role</td>
+                                            <td class=" p-2 font-weight-bold">Edit</td>
+                                            <td class=" p-2 font-weight-bold">Delete</td>
+                                        </tr>
+                                        <tr th:each=" user: ${users} ">
+                                            <td class="bg-light border-top p-2 " th:text="${user.id}"></td>
+                                            <td class="bg-light border-top p-2" th:text="${user.name}"></td>
+                                            <td class="bg-light border-top p-2" th:text="${user.lastName}"></td>
+                                            <td class="bg-light border-top p-2" th:text="${user.age}"></td>
+                                            <td class="bg-light border-top p-2" th:text="${user.roles}"></td>
+                                            <td class="bg-light border-top p-2">
+                                                <a type="button" class="btn btn-info text-light"
+                                                   data-bs-toggle="modal"
+                                                   th:data-bs-target="${'#modal-edit-user-' + user.id}">
+                                                    Edit
+                                                </a>
+                                            </td>
+                                            <td class="bg-light border-top p-2">
+                                                <a type="button" class="btn btn-danger text-light"
+                                                   data-bs-toggle="modal"
+                                                   th:data-bs-target="${'#modal-delete-user-' + user.id}">
+                                                    Delete user
+                                                </a>
+                                            </td>
+                                            <th:block th:insert="~{modals-block :: modalDelete(${user})}"/>
+                                            <th:block th:insert="~{modals-block :: modalUpdate(${user})}"/>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane show " id="add_user" role="tabpanel">
+                            <div class="card">
+                                <div class="font-weight-dold p-2">
+                                    Add user
+                                </div>
+                                <div th:if="${param.error}!= null">
+                                    <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                        Invalid username or password
+                                    </div>
+                                </div>
+                                <div class="justify-content-center">
+                                    <form action="#" th:action="@{/form}" class="hideElem form-check w-50 m-auto"
+                                          method="post">
+                                        <label>First name</label>
+                                        <input class="form-control mt-2" type="text" placeholder="Имя" name="name">
+                                        <label>Last name</label>
+                                        <input class="form-control mt-2" type="text" placeholder="Фамилия"
+                                               name="lastName">
+                                        <label>Birth-day</label>
+                                        <input class="form-control mt-2" type="date" name="date">
+                                        <label>Password</label>
+                                        <input class="form-control mt-2" type="password" placeholder="Пароль"
+                                               name="password">
+                                        <label>Role</label>
+                                        <br>
+                                        <select class="custom-select mt-2" id="inputGroupSelect01" name="authorisation">
+                                            <option value="ROLE_ADMIN">ADMIN</option>
+                                            <option value="ROLE_USER">USER</option>
+                                        </select>
+                                        <br>
+                                        <input class="btn btn-success mt-2" type="submit" value="Add new user">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade show" id="user_page" role="tabpanel">
+                <h2>User info-page</h2>
+                <div id="tabs" class="row"></div>
+                <div class="border p-2">
+                    About user
+                </div>
+                <div class="border bg-white p-2">
+                    <table class="w-100">
+                        <hr>
+                        <tr>
+                            <td class=" p-2 font-weight-bold">ID</td>
+                            <td class=" p-2 font-weight-bold">First name</td>
+                            <td class=" p-2 font-weight-bold">Last name</td>
+                            <td class=" p-2 font-weight-bold">Age</td>
+                            <td class=" p-2 font-weight-bold">Role</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light border-top p-2 " th:text="${us.id}"></td>
+                            <td class="bg-light border-top p-2" th:text="${us.name}"></td>
+                            <td class="bg-light border-top p-2" th:text="${us.lastName}"></td>
+                            <td class="bg-light border-top p-2" th:text="${us.age}"></td>
+                            <td class="bg-light border-top p-2" th:text="${us.roles}"></td>
+                        </tr>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+        integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    // Open tab from url hash
+    $(function () {
+        var hash = window.location.hash;
+        hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+    });
+</script>
+<script>
+
+    function openTab(evt, contentName) {
+        console.log("hey")
+        let i, tabcontent;
+        let listLink = document.getElementById("list_link");
+        let addLink = document.getElementById("add_user")
+        const content = document.getElementById(contentName);
+        const tabContent = document.getElementById()
+        let listButtons = document.getElementsByClassName('link_buttons');
+
+        if (contentName === "add_user") {
+            name.textContent = "Add new user";
+        } else {
+            name.textContent = "All users";
+        }
+        tabcontent = document.getElementsByClassName("hideElem");
+
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        content.style.display = "block";
+        for (i = 0; i < content.children.length; i++) {
+            content.children[i].style.display = "block";
+        }
+
+        if (content.id == "table_users") {
+            console.log(listLink);
+            listLink.className = "btn btn-light"
+            addLink.className = "btn btn-link"
+            console.log(listLink);
+        } else {
+            listLink.className = "btn btn-link";
+            addLink.className = "btn btn-ligh";
+        }
+        listLink.classList.toggle('active');
+    }
+</script>
+</body>
+</html>

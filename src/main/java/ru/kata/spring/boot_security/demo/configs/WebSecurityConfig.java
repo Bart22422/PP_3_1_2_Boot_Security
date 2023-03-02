@@ -5,23 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.kata.spring.boot_security.demo.service.MyUserDetailsService;
-import ru.kata.spring.boot_security.demo.util.MySimpleUrlAuthenticationSuccessHandler;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
 
     private final MyUserDetailsService myUserDetailService;
+
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler,
                              MyUserDetailsService myUserDetailService) {
@@ -55,15 +46,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers( "/","/index","/add/**").permitAll()
-                .antMatchers("/user").hasAnyRole("USER","ADMIN")
+                .antMatchers("/static/**","/", "/index", "/add/**").permitAll()
+                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin").hasRole("ADMIN")
                 .and()
                 .formLogin()
-                    .loginPage("/modern-login-page")
-                    .loginProcessingUrl("/authenticateTheUser")
-                    .successHandler(myAuthenticationSuccessHandler())
-                    .failureUrl("/login?error")
+                .loginPage("/modern-login-page")
+                .loginProcessingUrl("/authenticateTheUser")
+                .successHandler(myAuthenticationSuccessHandler())
+                .failureUrl("/login?error")
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -71,15 +62,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/index.js");
+    }
+
+    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailService);
     }
+
     @Bean
-    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
-        return new MySimpleUrlAuthenticationSuccessHandler();
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
+        return successUserHandler;
     }
+
     @Bean
-    public PasswordEncoder getPasswordEncoder (){return NoOpPasswordEncoder.getInstance(); }
+    public PasswordEncoder getPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
   /*  // аутентификация inMemory
     @Bean
     @Override

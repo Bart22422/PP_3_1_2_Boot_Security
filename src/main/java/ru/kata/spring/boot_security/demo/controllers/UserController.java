@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -31,45 +32,51 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/i")
-    public String index() {
-        //model.addAttribute("user", principal);
-        return"us";
-    }
     @GetMapping("/user")
-    public String user( Model model ){
+    public String user(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         authentication.getPrincipal();
-        User user = (User)authentication.getPrincipal();;
+        User user = (User) authentication.getPrincipal();
+        ;
         model.addAttribute("user", user);
         return "user";
     }
+
     @GetMapping("/admin")
-    public String users(Model model){
+    public String users(Model model ,User newUser) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        newUser = new User();
         List<User> users = userService.getUsers();
         model.addAttribute("users", users);
+        model.addAttribute("us", user);
+        model.addAttribute("newUs", newUser);
         return "users";
     }
+
     @GetMapping("/modern-login-page")
-    public String login(){
+    public String login() {
         return "modern-login-page";
     }
+
     @GetMapping("/add")
-    public String registration(Model model){
+    public String registration(Model model) {
         User user = new User();
         model.addAttribute("user", user);
         return "registration";
     }
+
     @PostMapping("/form")
-    public String addNewUser(@RequestParam(value = "name")String name, @RequestParam(value = "password")String pass, @RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "date",required = false, defaultValue = "0000-00-00") String date, @RequestParam(value = "authorisation",required = false, defaultValue = "ROLE_USER")String auth) throws ParseException {
+    public String addNewUser(@RequestParam(value = "name") String name, @RequestParam(value = "password") String pass, @RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "date", required = false, defaultValue = "0000-00-00") String date, @RequestParam(value = "authorisation", required = false, defaultValue = "ROLE_USER") String auth) throws ParseException {
         User user = new User();
-        if(!date.isEmpty()){
+        if (!date.isEmpty()) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
             simpleDateFormat.applyPattern("yyyy-MM-dd");
             Date date1 = simpleDateFormat.parse(date);
-            user.setAge(date1);user.setAge(date1);
+            user.setAge(date1);
+            user.setAge(date1);
         }
-        if(lastName!=null){
+        if (lastName != null) {
             user.setLastName(lastName);
         }
         user.setName(name);
@@ -78,37 +85,53 @@ public class UserController {
         user.addRole(roleService.loadByRoleName(auth));
         System.out.println(user.getRoles());
         userService.addUser(user);
-        return "redirect:/user";
+        return "redirect:/admin";
     }
+
     @PostMapping("/update")
-    public String update (@RequestParam(value = "id")Long id,@RequestParam(value = "name", required = false)String name,@RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "date",required = false, defaultValue = "0000-00-00") String date, @RequestParam(value = "authorisation",required = false)String auth) throws ParseException {
+    public String update(@RequestParam(value = "id") Long id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "lastName", required = false) String lastName, @RequestParam(value = "date", required = false, defaultValue = "0000-00-00") String date, @RequestParam(value = "authorisation", required = false) String auth) throws ParseException {
         User user = userService.getUser(id);
-        if( name!=null){
+        String oldName = user.getName();
+        String oldLastName = user.getLastName();
+        Set<Role> oldRole = user.getRoles();
+        Date age = user.getAge();
+
+        if (name != null) {
             user.setName(name);
+        } else {
+            user.setName(oldName);
         }
-        if( lastName!=null){
+        if (lastName != null) {
             user.setLastName(lastName);
+        } else {
+            user.setLastName(oldLastName);
         }
-        if( auth!=null){
+        if (auth != null) {
             user.addRole(roleService.loadByRoleName(auth));
+        } else {
+            user.setRoles(oldRole);
         }
-        if( date!=null){
+        if (date != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
             simpleDateFormat.applyPattern("yyyy-MM-dd");
             Date date1 = simpleDateFormat.parse(date);
             user.setAge(date1);
+        } else {
+            user.setAge(age);
         }
         userService.updateUser(user);
-        return  "redirect:/admin";
+        return "redirect:/admin";
     }
+
     @PostMapping("/delete")
-    public String delete (@RequestParam(value = "id") long id){
+    public String delete(@RequestParam(value = "id") long id) {
         userService.deleteUser(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
+
     @PostMapping("/clean")
-    public String clean (){
+    public String clean() {
         userService.cleanTable();
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 }

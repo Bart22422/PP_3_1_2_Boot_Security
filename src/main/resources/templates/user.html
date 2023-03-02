@@ -8,33 +8,40 @@
 </head>
 <body>
     <div class="container-fluid m-auto bg-dark row justify-content-between p-2">
-        <h5 class="text-light" th:text="${user.name}+' whith roles: '"> <i th:each="role: ${user.roles}" th:text="role"></i></h5>
+        <h5 class="text-light" th:text="${user.name}+' whith roles: '" th:each="role: ${user.roles}"> <i  th:text=" ' '+${role.name}"></i></h5>
         <a href="#" th:href="@{/logout}" class=" text-secondary">logout</a>
     </div>
     <div class="row pt-5">
-        <div class="col-2">
-            <a class="btn btn-primary form-control text-left text-light" th:text="${user.name}"></a>
+        <div class="col-2" th:each="role: ${user.roles}">
+            <form th:action="@{/user}" method="get" >
+                <input type="submit" class="btn btn-primary form-control text-left text-light mb-1" value="User" >
+            </form>
+            <div th:if="${role.name}=='ROLE_ADMIN'">
+                <a type="submit" class="btn btn-link form-control text-left mb-1" th:href="@{/admin}" th:text="Admin"></a>
+            </div>
         </div>
-        <div class="col-8 bg-light w-100 h-100">
+        <div class="col-8 bg-light w-100 h-100" id="user_page">
             <h2>User info-page</h2>
+            <div id="tabs" class="row"></div>
             <div class="border p-2">
                 About user
             </div>
             <div class="border bg-white p-2">
                 <table class="w-100">
+                    <hr>
                     <tr>
-                        <td class="border px-2 font-weight-bold">ID</td>
-                        <td class="border px-2 font-weight-bold">First name</td>
-                        <td class="border px-2 font-weight-bold">Last name</td>
-                        <td class="border px-2 font-weight-bold">Age</td>
-                        <td class="border px-2 font-weight-bold">Role</td>
+                        <td class=" p-2 font-weight-bold">ID</td>
+                        <td class=" p-2 font-weight-bold">First name</td>
+                        <td class=" p-2 font-weight-bold">Last name</td>
+                        <td class=" p-2 font-weight-bold">Age</td>
+                        <td class=" p-2 font-weight-bold">Role</td>
                     </tr>
                     <tr>
-                        <td class="border px-2 " th:text="${user.id}"></td>
-                        <td class="border px-2 " th:text="${user.name}">Name</td>
-                        <td class="border px-2 " th:text="${user.lastName}">Ivanov</td>
-                        <td class="border px-2 " th:text="${user.age}">1969-01-22</td>
-                        <td class="border px-2 " th:text="${user.roles}">USER</td>
+                        <td class="bg-light border-top p-2 " th:text="${user.id}"></td>
+                        <td class="bg-light border-top p-2" th:text="${user.name}"></td>
+                        <td class="bg-light border-top p-2" th:text="${user.lastName}"></td>
+                        <td class="bg-light border-top p-2" th:text="${user.age}"></td>
+                        <td class="bg-light border-top p-2" th:text="${user.roles}"></td>
                     </tr>
                 </table>
 

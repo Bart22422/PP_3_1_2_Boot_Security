@@ -4,92 +4,108 @@
     <meta charset="UTF-8">
     <title>Users list</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </head>
-<body style="text-align: center">
-<div class="container">
-    <h1>Users</h1>
-    <table style="margin: auto">
-        <tr th:each="user: ${users}">
-            <td th:text="${user.name}"/>
-            <td th:text="${user.lastName}"/>
-            <td th:text="${user.age}"></td>
-            <td>
-                <form th:action="@{/delete}" method="post">
-                    <input type="hidden" name="id" th:value="${user.id}">
-                    <button type="submit" th:text="${user.id}+' '+'Delete User'" class="btn btn-danger"></button>
+<body>
+    <div class="container-fluid m-auto bg-dark row justify-content-between p-2">
+        <h5 class="text-light" th:text="${us.name}+' whith roles: '" th:e   ach="role: ${us.roles}"> <i  th:text=" ' '+${role.name}"></i></h5>
+        <a href="#" th:href="@{/logout}" class=" text-secondary">logout</a>
+    </div>
+    <div  th:insert="~{body :: adminPage(${us}, ${users})}"></div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <label class="font-weight-bold" th:target="id">ID</label>
+                        <input class="form-control mt-2" type="number" placeholder="">
+                        <label class="font-weight-bold">First name</label>
+                        <input class="form-control mt-2" type="text" placeholder="Имя">
+                        <label class="font-weight-bold">Last name</label>
+                        <input class="form-control mt-2" type="text" placeholder="Фамилия">
+                        <label class="font-weight-bold">Birth-day</label>
+                        <input class="form-control mt-2" type="date" placeholder="Имя">
+                        <label class="font-weight-bold">Password</label>
+                        <input class="form-control mt-2" type="password" placeholder="Пароль">
+                        <label class="font-weight-bold">Role</label>
+                        <br>
+                        <select class="custom-select mt-2" id=" " name="authorisation">
+                            <option value="ROLE_ADMIN">ADMIN</option>
+                            <option value="ROLE_USER">USER</option>
+                        </select>
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                    </div>
                 </form>
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-    <h3>Create user</h3>
-    <form th:action="@{/form}"   method="post" style="margin: auto">
-        <div class="form-group">
-            <label>
-                Name:
-            </label>
-            <input  name="name" />
-            <p></p>
-            <label>
-                Password:
-            </label>
-            <input  name="password" />
-            <p></p>
-            <label>
-                Last Name:
-            </label>
-            <input  name="lastName" />
-            <p></p>
-            <label>
-                Date:
-            </label>
-            <input  type="date" name="date">
-
-            <div  style="margin-top: 2rem" class="form-check" >
-                <input class="form-check-input" type="radio" name="authorisation" id="exampleRadios1" value="ROLE_USER" checked>
-                <label class="form-check-label" for="exampleRadios1">
-                    Default user
-                </label>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="authorisation" id="exampleRadios2" value="ROLE_ADMIN">
-                <label class="form-check-label" for="exampleRadios2">
-                    Admin
-                </label>
-            </div>
-
-            <p style="margin-top: 2rem"><input  type="submit" value="Submit" class="btn btn-primary"/> <input type="reset" value="Reset" class="btn btn-danger" /></p>
         </div>
-    </form>
     </div>
-    <div style="margin-top: 2rem;">
-        <h3>Update user</h3>
-        <form th:action="@{/update}"  method="post">
-            <label>ID:</label>
-            <input type="number" name="id">
-            <label>Name:</label>
-            <input  name="name" />
-            <p></p>
-            <label>Last Name:</label>
-            <input  name="lastName" />
-            <p></p>
-            <label>Date:</label>
-            <input type="date" name="date">
-            <p><input type="submit" value="Submit"  class="btn btn-primary"/> <input type="reset" value="Reset" class="btn btn-danger"/></p>
-        </form>
-    </div>
-    <div style="margin-top: 2rem;">
-        <h3>Clean table</h3>
-        <form th:action="@{/clean}"   method="post">
-            <p><input type="submit" value="Clean table" class="btn btn-primary"/>
-        </form>
-    </div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="/index.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+            integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        // Open tab from url hash
+        $(function () {
+            var hash = window.location.hash;
+            hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+        });
+    </script>
+    <script>
+
+    function openTab(evt, contentName) {
+        console.log("hey")
+        let i, tabcontent;
+        let listLink = document.getElementById("list_link");
+        let addLink = document.getElementById("add_user")
+        const content = document.getElementById(contentName);
+        const tabContent = document.getElementById()
+        let listButtons = document.getElementsByClassName('link_buttons');
+
+        if(contentName === "add_user"){
+            name.textContent = "Add new user";
+        }else{
+            name.textContent="All users";
+        }
+        tabcontent = document.getElementsByClassName("hideElem");
+
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        content.style.display = "block";
+        for (i = 0; i < content.children.length; i++) {
+            content.children[i].style.display = "block";
+        }
+
+        if(content.id=="table_users"){
+            console.log(listLink);
+            listLink.className = "btn btn-light"
+            addLink.className="btn btn-link"
+            console.log(listLink);
+        }else{
+            listLink.className="btn btn-link";
+            addLink.className ="btn btn-ligh";
+        }
+        listLink.classList.toggle('active');
+    }
+</script>
 </body>
 </html>

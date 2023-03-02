@@ -44,6 +44,5 @@ public class UserServiceImpl implements  UserService{
     @Transactional
     public void updateUser( User user){
         userDaoImpl.save(user);
-
     }
 }

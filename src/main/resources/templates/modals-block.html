@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>modal-block</title>
+</head>
+<body>
+
+    <div th:fragment="modalDelete(user)" class="modal fade" th:id="${'modal-delete-user-' + user.id}" tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" >Delete user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form th:action="@{/delete}" method="post">
+                        <div class="modal-body">
+                            <label class="font-weight-bold"  >ID</label>
+                            <input class="form-control mt-2" type="number" name="id" th:value="${user.id}" readonly>
+                            <label class="font-weight-bold">First name</label>
+                            <input class="form-control mt-2" type="text" th:value="${user.name}" readonly>
+                            <label class="font-weight-bold">Last name</label>
+                            <input class="form-control mt-2" type="text" th:value="${user.lastName}" readonly>
+                            <label class="font-weight-bold">Birth-day</label>
+                            <input class="form-control mt-2" type="date" th:value="${user.age}" readonly>
+                            <label class="font-weight-bold">Password</label>
+                            <input class="form-control mt-2" type="password" th:value="${user.password}" readonly>
+                            <label class="font-weight-bold">Role</label>
+                            <br>
+                            <select class="custom-select mt-2" readonly>
+                                <option >ADMIN</option>
+                                <option >USER</option>
+                            </select>
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <div th:fragment="modalUpdate(user)" class="modal fade" th:id="${'modal-edit-user-' + user.id}" tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form th:action="@{/update}" method="post">
+                        <div class="modal-body">
+                            <label class="font-weight-bold"  >ID</label>
+                            <input class="form-control mt-2" type="number" name="id" th:value="${user.id}" readonly>
+                            <label class="font-weight-bold">First name</label>
+                            <input class="form-control mt-2" type="text" name="name">
+                            <label class="font-weight-bold">Last name</label>
+                            <input class="form-control mt-2" type="text" name="lasName">
+                            <label class="font-weight-bold">Birth-day</label>
+                            <input class="form-control mt-2" type="date" name="date">
+                            <label class="font-weight-bold">Role</label>
+                            <br>
+                            <select class="custom-select mt-2"  name="authorisation">
+                                <option >ADMIN</option>
+                                <option >USER</option>
+                            </select>
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-info">Edit User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
