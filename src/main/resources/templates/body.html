@@ -69,8 +69,8 @@
                                                     Delete user
                                                 </a>
                                             </td>
-                                            <th:block th:insert="~{modals-block :: modalDelete(${user})}"/>
-                                            <th:block th:insert="~{modals-block :: modalUpdate(${user})}"/>
+                                            <div id="modal_delete" th:insert="~{modals-block :: modalDelete(${user})}"></div>
+                                            <div id="modal_update" th:insert="~{modals-block :: modalUpdate(${user})}"></div>
                                         </tr>
 
                                     </table>
@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <div class="justify-content-center">
-                                    <form action="#" th:action="@{/form}" class="hideElem form-check w-50 m-auto"
+                                    <form action="#" id = "add_new_user" th:action="@{/form}" class="hideElem form-check w-50 m-auto"
                                           method="post">
                                         <label>First name</label>
                                         <input class="form-control mt-2" type="text" placeholder="Имя" name="name">
@@ -148,6 +148,7 @@
 
     </div>
 </div>
+<script src="/index.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
         integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
         crossorigin="anonymous"
