@@ -1,7 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+/*класс для приема данных от клиента в виде строк*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Usr {
     private String name;
