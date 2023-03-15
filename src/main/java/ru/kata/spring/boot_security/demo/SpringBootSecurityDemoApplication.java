@@ -40,13 +40,15 @@ public class SpringBootSecurityDemoApplication {
         System.out.println("GET=======================");
         getUs(restTemplate, httpHeaders);
         System.out.println("POST=======================");
-        createUs(us, restTemplate, httpHeaders);
+        String firstPartCode = createUs(us, restTemplate, httpHeaders);
         System.out.println("PUT=======================");
         us.setName("Thomas");
         us.setLastName("Shelby");
-        updateUs(us, restTemplate, httpHeaders);
+        String secondPartCode = updateUs(us, restTemplate, httpHeaders);
         System.out.println("DELETE=======================");
-        deleteUs(us, restTemplate, httpHeaders);
+        String thirdPartCode = deleteUs(us, restTemplate, httpHeaders);
+        System.out.println("CODE=======================");
+        System.out.println(firstPartCode+secondPartCode+thirdPartCode);
     }
 
     /*public static ResponseEntity<?> setCookie(HttpServletResponse response) throws IOException {
@@ -68,24 +70,27 @@ public class SpringBootSecurityDemoApplication {
         System.out.println(response.getBody());
     }
 
-    private static void createUs(Us us, RestTemplate restTemplate, HttpHeaders httpHeaders) {
+    private static String createUs(Us us, RestTemplate restTemplate, HttpHeaders httpHeaders) {
         HttpEntity<Us> httpEntity = new HttpEntity<>(us, httpHeaders);
         ResponseEntity<String> response = restTemplate.exchange(POST_US_ENDPOINT_URL, HttpMethod.POST, httpEntity, String.class);
         ResponseEntity<String> response1 = restTemplate.exchange(POST_US_ENDPOINT_URL, HttpMethod.GET, httpEntity, String.class);
         System.out.println(response1.getBody());
+        return response.getBody();
     }
 
-    private static void updateUs(Us us, RestTemplate restTemplate, HttpHeaders httpHeaders) {
+    private static String updateUs(Us us, RestTemplate restTemplate, HttpHeaders httpHeaders) {
         HttpEntity<Us> httpEntity = new HttpEntity<>(us, httpHeaders);
         ResponseEntity<String> response = restTemplate.exchange(POST_US_ENDPOINT_URL, HttpMethod.PUT, httpEntity, String.class);
         ResponseEntity<String> response1 = restTemplate.exchange(GET_US_ENDPOINT_URL, HttpMethod.GET, httpEntity, String.class);
         System.out.println(response1.getBody());
+        return response.getBody();
     }
 
-    private static void deleteUs(Us us, RestTemplate restTemplate, HttpHeaders httpHeaders) {
+    private static String deleteUs(Us us, RestTemplate restTemplate, HttpHeaders httpHeaders) {
         HttpEntity<Us> httpEntity = new HttpEntity<>(us, httpHeaders);
         ResponseEntity<String> response = restTemplate.exchange(POST_US_ENDPOINT_URL + "/" + us.getId(), HttpMethod.DELETE, httpEntity, String.class);
         ResponseEntity<String> response1 = restTemplate.exchange(POST_US_ENDPOINT_URL, HttpMethod.GET, httpEntity, String.class);
         System.out.println(response1.getBody());
+        return response.getBody();
     }
 }

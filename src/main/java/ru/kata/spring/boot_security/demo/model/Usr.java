@@ -9,6 +9,24 @@ public class Usr {
     private String date;
     private String authorisation;
 
+    private String pass;
+
+    public void setAuthorisation(String authorisation) {
+        this.authorisation = authorisation;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public String getAuthorisation() {
+        return authorisation;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
